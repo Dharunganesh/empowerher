@@ -41,6 +41,7 @@ mvnw.cmd
 application-local.yml
 application-dev.yml
 application-prod.yml
+.env
 
 # OS specific
 .DS_Store

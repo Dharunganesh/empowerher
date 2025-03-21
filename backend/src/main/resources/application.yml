@@ -2,9 +2,9 @@ spring:
   application:
     name: saferoute-backend
   datasource:
-    url: jdbc:postgresql://localhost:5432/saferoute
-    username: postgres
-    password: postgres
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -22,7 +22,7 @@ server:
 
 # JWT Configuration
 jwt:
-  secret: your-secret-key-here
+  secret: ${JWT_SECRET:your-secret-key-here}
   expiration: 86400000 # 24 hours in milliseconds
 
 # Logging Configuration
