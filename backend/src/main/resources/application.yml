@@ -25,12 +25,18 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,info,metrics
+      base-path: /actuator
   endpoint:
     health:
       show-details: always
       probes:
         enabled: true
+  health:
+    db:
+      enabled: true
+    diskSpace:
+      enabled: true
 
 # JWT Configuration
 jwt:
@@ -42,4 +48,8 @@ logging:
   level:
     root: INFO
     com.saferoute: DEBUG
-    org.springframework.security: INFO 
+    org.springframework.security: INFO
+    org.springframework.web: INFO
+    org.hibernate: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n" 
