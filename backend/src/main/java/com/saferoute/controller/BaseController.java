@@ -1,6 +1,6 @@
 package com.saferoute.controller;
 
-import com.saferoute.model.ApiResponse;
+import com.saferoute.util.ApiResponse;
 import com.saferoute.service.LocalizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,12 +12,12 @@ public class BaseController {
 
     protected ResponseEntity<ApiResponse<?>> successResponse(Object data, String messageKey, String language) {
         String message = localizationService.getMessage(messageKey, language);
-        return ResponseEntity.ok(ApiResponse.success(data, message, language));
+        return ResponseEntity.ok(ApiResponse.success(message, data));
     }
 
     protected ResponseEntity<ApiResponse<?>> errorResponse(String messageKey, String language) {
         String message = localizationService.getMessage(messageKey, language);
-        return ResponseEntity.badRequest().body(ApiResponse.error(message, language));
+        return ResponseEntity.badRequest().body(ApiResponse.error(message));
     }
 
     protected ResponseEntity<ApiResponse<?>> notFoundResponse(String language) {
