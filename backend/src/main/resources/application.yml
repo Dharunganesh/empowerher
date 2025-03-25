@@ -17,26 +17,19 @@ spring:
 
 server:
   port: ${PORT:8080}
-  servlet:
-    context-path: /api
 
 # Actuator Configuration
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics
-      base-path: /actuator
+        include: health
+      base-path: /
   endpoint:
     health:
       show-details: always
       probes:
         enabled: true
-  health:
-    db:
-      enabled: true
-    diskSpace:
-      enabled: true
 
 # JWT Configuration
 jwt:
