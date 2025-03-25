@@ -1,0 +1,22 @@
+# Version control
+.git
+.gitignore
+
+# Frontend
+frontend/
+frontend/node_modules/
+
+# Security
+security/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Environment files
+.env
+.env.*
+
+# Documentation
+*.md 
