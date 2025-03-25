@@ -2,6 +2,7 @@ import React from 'react';
 import { SafeAreaView, StatusBar, useColorScheme } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
+import { AuthProvider } from './context/AuthContext';
 import AppNavigator from './navigation/AppNavigator';
 
 const App = () => {
@@ -20,15 +21,17 @@ const App = () => {
 
   return (
     <PaperProvider theme={theme}>
-      <NavigationContainer>
-        <SafeAreaView style={{ flex: 1 }}>
-          <StatusBar
-            barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-            backgroundColor={theme.colors.background}
-          />
-          <AppNavigator />
-        </SafeAreaView>
-      </NavigationContainer>
+      <AuthProvider>
+        <NavigationContainer>
+          <SafeAreaView style={{ flex: 1 }}>
+            <StatusBar
+              barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+              backgroundColor={theme.colors.background}
+            />
+            <AppNavigator />
+          </SafeAreaView>
+        </NavigationContainer>
+      </AuthProvider>
     </PaperProvider>
   );
 };
