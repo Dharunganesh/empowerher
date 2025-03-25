@@ -1,8 +1,8 @@
 # Build stage
 FROM maven:3.8.5-openjdk-17-slim AS build
 WORKDIR /app
-COPY backend/pom.xml .
-COPY backend/src ./src
+COPY pom.xml .
+COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Run stage
