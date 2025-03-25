@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import authService from '../services/authService';
-import securityService from '../services/securityService';
+import { useAuth } from '../context/AuthContext';
 
 import HomeScreen from '../screens/HomeScreen';
 import SafeRouteScreen from '../screens/SafeRouteScreen';
@@ -15,33 +14,7 @@ import SecurityCheckScreen from '../screens/SecurityCheckScreen';
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [needsSecurityCheck, setNeedsSecurityCheck] = useState(false);
-
-  useEffect(() => {
-    checkAuthState();
-  }, []);
-
-  const checkAuthState = async () => {
-    try {
-      const token = await authService.getToken();
-      if (token) {
-        setIsAuthenticated(true);
-        // Check if security verification is needed
-        const settings = await securityService.getSecuritySettings();
-        const shouldCheck = await securityService.checkSessionTimeout();
-        setNeedsSecurityCheck(
-          (settings.pinEnabled || settings.biometricEnabled) && shouldCheck
-        );
-      }
-    } catch (error) {
-      console.error('Error checking auth state:', error);
-      setIsAuthenticated(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { isAuthenticated, isLoading, needsSecurityCheck } = useAuth();
 
   if (isLoading) {
     return null; // Or a loading screen
