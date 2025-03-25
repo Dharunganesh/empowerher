@@ -13,8 +13,7 @@ import {
   Surface,
   useTheme,
 } from 'react-native-paper';
-import authService from '../services/authService';
-import securityService from '../services/securityService';
+import { useAuth } from '../context/AuthContext';
 
 interface AuthScreenProps {
   navigation: any;
@@ -29,6 +28,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const theme = useTheme();
+  const { login, register } = useAuth();
 
   const handleAuth = async () => {
     try {
@@ -36,25 +36,14 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ navigation }) => {
       setError('');
 
       if (isLogin) {
-        // Login
-        const response = await authService.login({ email, password });
-        // After successful login, check if PIN/biometric is enabled
-        const securitySettings = await securityService.getSecuritySettings();
-        if (securitySettings.pinEnabled || securitySettings.biometricEnabled) {
-          navigation.navigate('SecurityCheck');
-        } else {
-          navigation.navigate('Home');
-        }
+        await login(email, password);
       } else {
-        // Register
-        const response = await authService.register({
+        await register({
           email,
           password,
           name,
           phoneNumber,
         });
-        // After registration, set up security settings
-        navigation.navigate('SecuritySetup');
       }
     } catch (err: any) {
       setError(err.message || 'Authentication failed');

@@ -14,8 +14,7 @@ import {
   Switch,
   useTheme,
 } from 'react-native-paper';
-import securityService from '../services/securityService';
-import authService from '../services/authService';
+import { useAuth } from '../context/AuthContext';
 
 interface SecuritySetupScreenProps {
   navigation: any;
@@ -31,6 +30,7 @@ const SecuritySetupScreen: React.FC<SecuritySetupScreenProps> = ({
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const theme = useTheme();
+  const { updateSecuritySettings } = useAuth();
 
   const handleSetup = async () => {
     try {
@@ -48,7 +48,7 @@ const SecuritySetupScreen: React.FC<SecuritySetupScreenProps> = ({
         }
       }
 
-      await securityService.updateSecuritySettings({
+      await updateSecuritySettings({
         pinEnabled,
         biometricEnabled,
         pin: pinEnabled ? pin : undefined,
