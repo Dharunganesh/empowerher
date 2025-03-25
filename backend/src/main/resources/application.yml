@@ -6,6 +6,25 @@ spring:
     username: ${DATABASE_USER}
     password: ${DATABASE_PASSWORD}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+      connection-timeout: 20000
+      idle-timeout: 300000
+      max-lifetime: 1200000
+      connection-test-query: SELECT 1
+      validation-timeout: 5000
+      leak-detection-threshold: 60000
+    # Add connection retry logic
+    connection-retry:
+      max-attempts: 5
+      initial-interval: 1000
+      multiplier: 2
+      max-interval: 10000
+    # Add SSL configuration for Neon.tech
+    properties:
+      ssl: true
+      sslmode: require
   jpa:
     hibernate:
       ddl-auto: update
@@ -14,22 +33,43 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          time_zone: UTC
+    open-in-view: false
+    # Add JPA retry logic
+    retry:
+      max-attempts: 3
+      initial-interval: 1000
+      multiplier: 2
+      max-interval: 10000
 
 server:
   port: ${PORT:8080}
+  tomcat:
+    max-threads: 20
+    min-spare-threads: 5
+    connection-timeout: 5000
 
 # Actuator Configuration
 management:
   endpoints:
     web:
       exposure:
-        include: health
+        include: health,info,metrics
       base-path: /
   endpoint:
     health:
       show-details: always
       probes:
         enabled: true
+  health:
+    db:
+      enabled: true
+      show-details: always
+    readinessprobe:
+      enabled: true
+    livenessprobe:
+      enabled: true
 
 # JWT Configuration
 jwt:
@@ -44,5 +84,11 @@ logging:
     org.springframework.security: INFO
     org.springframework.web: INFO
     org.hibernate: INFO
+    org.springframework.boot.autoconfigure: INFO
+    org.springframework.boot.actuate: INFO
+    com.zaxxer.hikari: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.postgresql: DEBUG
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n" 
